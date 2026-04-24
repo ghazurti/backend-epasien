@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: epasien-backend
+    restart: always
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - AES_KEY=${AES_KEY}
+    # Ensure it listens on the IP 172.17.10.4 if needed, 
+    # but usually mapping to 0.0.0.0 inside container is enough
+    ports:
+      - "3000:3000"
+    networks:
+      - epasien-network
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: epasien-tunnel
+    restart: always
+    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    depends_on:
+      - backend
+    networks:
+      - epasien-network
+
+networks:
+  epasien-network:
+    driver: bridge
