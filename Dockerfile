@@ -26,7 +26,6 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 # Copy binary from builder
 COPY --from=builder /app/target/release/backend-rust /app/backend-rust
-COPY .env /app/.env
 # Create uploads directory if needed
 RUN mkdir -p /app/uploads
 EXPOSE 3000

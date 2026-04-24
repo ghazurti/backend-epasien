@@ -5,10 +5,8 @@ services:
     build: .
     container_name: epasien-backend
     restart: always
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-      - JWT_SECRET=${JWT_SECRET}
-      - AES_KEY=${AES_KEY}
+    env_file:
+      - .env
     # Ensure it listens on the IP 172.17.10.4 if needed, 
     # but usually mapping to 0.0.0.0 inside container is enough
     ports:
