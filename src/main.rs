@@ -119,12 +119,12 @@ async fn main() {
         .route("/api/fcm/token", post(handlers::notification::register_token))
         // Add FCM client to extensions
         .layer(axum::Extension(fcm_client))
-        // Add rate limiter to request extensions
-        .layer(axum::Extension(rate_limiter))
         // Apply rate limiting middleware
         .layer(axum::middleware::from_fn(
             middleware::rate_limit::rate_limit_middleware,
         ))
+        // Extension(rate_limiter) harus di luar middleware agar tersedia saat middleware jalan
+        .layer(axum::Extension(rate_limiter))
         .layer(cors)
         .with_state(pool);
 
